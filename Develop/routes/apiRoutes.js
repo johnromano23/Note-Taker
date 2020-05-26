@@ -1,54 +1,32 @@
-// links the route to the JSON data
-const router = require("express").Router();
-const fs = require("fs");
+// Require db
+const noteData = require("../db/db.json");
 
-// get notes
-router.get("/notes", function (req, res) {
-  fs.readFile("db/db.json", "utf8", function (err, data) {
-    if (err) throw err;
-    res.send(JSON.parse(data));
+// Routes
+module.exports = function (app) {
+  // Displays all notes in json format
+  app.get("/api/notes", (req, res) => {
+    res.json(noteData);
   });
-  console.log("GET working");
-});
 
-//save notes and append to json file
-router.post("/notes", function (req, res) {
-  fs.readFile("db/db.json", "utf8", function (err, data) {
-    if (err) throw err;
-
-    let note = JSON.parse(data);
-    let newNote = req.body;
-    //give an id to each object to retrieve it later
-    newNote.id = uuid();
-    note.push(newNote);
-
-    //write the file
-    fs.writeFile("db/db.json", JSON.stringify(note), (err) => {
-      if (err) throw err;
-    });
+  // Post new note
+  app.post("/api/notes", (req, res) => {
+    noteData.push(req.body);
+    res.json(noteData);
   });
-  res.json("");
-});
 
-//retrieve the note onject by id and delete it
-router.delete("/notes/:id", function (req, res) {
-  fs.readFile("db/db.json", "utf8", function (err, data) {
-    if (err) throw err;
+  // Delete note
+  app.delete("/api/notes/:id", (req, res) => {
     let noteId = req.params.id;
-    let noteData = JSON.parse(data);
-    noteData = noteData.filter(function (note) {
-      if (noteId != note.id) {
-        return true;
-      } else {
-        return false;
-      }
-    });
-    //write file
-    fs.writeFile("db/db.json", JSON.stringify(noteData), function (error) {
-      if (error) throw error;
-      res.send(console.log("Deleted!"));
-    });
-  });
-});
+    let removeIndex;
 
-module.exports = router;
+    for (let i = 0; i < noteData.length; i++) {
+      if (noteData[i].id === noteId) {
+        removeIndex = i;
+      }
+    }
+
+    noteData.splice(removeIndex, 1);
+
+    res.json(noteData);
+  });
+};
