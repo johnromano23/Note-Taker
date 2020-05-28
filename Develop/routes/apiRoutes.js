@@ -1,32 +1,27 @@
-// Require db
-const noteData = require("../db/db.json");
+// Require db.json
+const notes = require("../db/db.json");
 
-// Routes
+// Display, post and delete notes
 module.exports = function (app) {
-  // Displays all notes in json format
-  app.get("/api/notes", (req, res) => {
-    res.json(noteData);
+  app.get("/api/notes", (_req, res) => {
+    res.json(notes);
   });
-
-  // Post new note
   app.post("/api/notes", (req, res) => {
     noteData.push(req.body);
-    res.json(noteData);
+    res.json(notes);
   });
-
-  // Delete note
   app.delete("/api/notes/:id", (req, res) => {
     let noteId = req.params.id;
     let removeIndex;
 
-    for (let i = 0; i < noteData.length; i++) {
-      if (noteData[i].id === noteId) {
+    for (let i = 0; i < notes.length; i++) {
+      if (notes[i].id === noteId) {
         removeIndex = i;
       }
     }
 
-    noteData.splice(removeIndex, 1);
+    notes.splice(removeIndex, 1);
 
-    res.json(noteData);
+    res.json(notes);
   });
 };
