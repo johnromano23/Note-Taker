@@ -1,9 +1,9 @@
-To access the application:
-open the terminal on server.js
-enter node server.js
-a message should pop up that says application is listening to the designated port
-open your browser and type "localhost:3000" as a URL
-to see the saved notes in JSON format - include api/notes after the "/"
+# To access the application:
+* open the terminal on server.js
+* enter node server.js
+* a message should pop up that says application is listening to the designated port
+* open your browser and type "localhost:3000" as a URL
+* to see the saved notes in JSON format - include api/notes after the "/"
 
 # Unit 11 Express Homework: Note Taker
 
